@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: figma-mcp
-  namespace: figma-mcp
   labels:
     app: figma-mcp
 spec:
@@ -17,7 +16,9 @@ spec:
     spec:
       containers:
         - name: figma-mcp
-          image: ivypods/figma-mcp:new
+          # Set after building: docker build -t figma-mcp-server:latest .
+          # e.g. ghcr.io/myorg/figma-mcp-server:latest
+          image: <IMAGE_NAME>
           ports:
             - containerPort: 3100
               name: http
@@ -46,18 +47,17 @@ spec:
                 secretKeyRef:
                   name: figma-mcp-secrets
                   key: FIGMA_OAUTH_REFRESH_TOKEN
-            - name: OTEL_SERVICE_NAME
-              value: "figma-mcp-server"
-            - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
-              value: "<OTEL_EXPORTER_OTLP_TRACES_ENDPOINT>:4318/v1/traces"
-            - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
-              value: "<OTEL_EXPORTER_OTLP_METRICS_ENDPOINT>:3130/api/metrics/v1/save/otlp"
-            - name: OTEL_METRICS_EXPORTER
-              value: "otlp"
-            - name: OTEL_EXPORTER_OTLP_COMPRESSION
-              value: "gzip"
-            - name: OTEL_RESOURCE_ATTRIBUTES
-              value: "cube.environment=production"
+            # Optional: OpenTelemetry for traces/metrics. Omit to run without observability.
+            # - name: OTEL_SERVICE_NAME
+            #   value: "figma-mcp-server"
+            # - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
+            #   value: "http://<otel-collector>:4318/v1/traces"
+            # - name: OTEL_EXPORTER_OTLP_METRICS_ENDPOINT
+            #   value: "http://<otel-collector>:4318/v1/metrics"
+            # - name: OTEL_METRICS_EXPORTER
+            #   value: "otlp"
+            # - name: OTEL_EXPORTER_OTLP_COMPRESSION
+            #   value: "gzip"
           livenessProbe:
             httpGet:
               path: /health

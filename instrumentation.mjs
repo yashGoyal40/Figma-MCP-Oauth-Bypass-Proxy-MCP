@@ -8,9 +8,9 @@
 //   Traces  → port 4318  /v1/traces           (standard OTLP HTTP)
 //   Metrics → port 3130  /api/metrics/v1/save/otlp  (CubeAPM-specific)
 //
-// Required env vars (set via K8s deployment):
-//   OTEL_EXPORTER_OTLP_TRACES_ENDPOINT   - e.g. http://cubeapm:4318/v1/traces
-//   OTEL_EXPORTER_OTLP_METRICS_ENDPOINT  - e.g. http://cubeapm:3130/api/metrics/v1/save/otlp
+// Optional env vars (omit to run without observability):
+//   OTEL_EXPORTER_OTLP_TRACES_ENDPOINT   - e.g. http://otel-collector:4318/v1/traces
+//   OTEL_EXPORTER_OTLP_METRICS_ENDPOINT  - e.g. http://otel-collector:4318/v1/metrics
 //   OTEL_SERVICE_NAME                     - defaults to "figma-mcp-server"
 //   OTEL_METRICS_EXPORTER                 - set to "otlp"
 // ---------------------------------------------------------------------------
